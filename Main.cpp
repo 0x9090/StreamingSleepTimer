@@ -3,11 +3,17 @@
 #include <tchar.h>;
 #include <chrono>;
 #include <thread>;
+#include <iostream>;
+#include <stdio.h>;
 #include "Monitors.h";
 
+using std::cout;
+using std::cin;
+using std::endl;
+using std::chrono::minutes;
+using std::this_thread::sleep_for;
 
-static unsigned int sleep_minutes = 5;
-
+unsigned int sleep_minutes = 30;
 
 void PowerOffMonitor() {
 	Monitors monitors;
@@ -24,7 +30,14 @@ void CloseBrowsers() {
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char* commandLine, int commandShow) {
-	std::this_thread::sleep_for(std::chrono::minutes(sleep_minutes));
+	AllocConsole();
+	freopen_s((FILE**)stdin, "CONIN$", "r", stdin);
+	freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+	freopen_s((FILE**)stderr, "CONOUT$", "r", stderr);
+	cout << "Minutes To Sleep: ";
+	cin >> sleep_minutes;
+	FreeConsole();
+	sleep_for(minutes(sleep_minutes));
 	PowerOffMonitor();
 	CloseBrowsers();
 }
